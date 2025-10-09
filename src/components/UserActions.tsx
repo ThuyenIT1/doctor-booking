@@ -1,26 +1,30 @@
 'use client'
 
 import Link from 'next/link'
-import { useFormStatus } from 'react-dom'
+import { useFormStatus, useFormState } from 'react-dom'
 import { logout } from '@/app/auth/actions'
+import { Button } from './ui/button'
 
 function LogoutButton() {
   const { pending } = useFormStatus()
 
   return (
-    <button className="py-2 px-4 rounded-md no-underline bg-gray-200 hover:bg-gray-300 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled={pending}>
+    <Button type="submit" variant="outline" disabled={pending}>
       {pending ? 'Đang đăng xuất...' : 'Đăng xuất'}
-    </button>
+    </Button>
   )
 }
 
 export default function UserActions({ displayName }: { displayName: string }) {
   return (
     <div className="flex items-center gap-4">
-      <span className="hidden sm:inline">Chào, {displayName}!</span>
-      <Link href="/profile" className="py-2 px-4 rounded-md no-underline bg-blue-600 text-white hover:bg-blue-700">
-        Hồ sơ
-      </Link>
+      <span className="hidden sm:inline text-sm font-medium">Chào, {displayName}!</span>
+      <Button asChild>
+        <Link href="/profile">Hồ sơ</Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link href="/my-appointments">Lịch hẹn</Link>
+      </Button>
       <form action={logout}>
         <LogoutButton />
       </form>

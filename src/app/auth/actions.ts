@@ -42,6 +42,43 @@ export async function updateProfile(formData: FormData) {
   return { success: true, message: 'Hồ sơ đã được cập nhật thành công' }
 }
 
+export async function cancelAppointment(appointmentId: number) {
+  'use server'
+
+  const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { success: false, message: 'Người dùng không được xác thực' }
+  }
+
+  // Lấy thông tin lịch hẹn để có schedule_id
+  const { data: appointment, error: fetchError } = await supabase
+    .from('appointments')
+    .select('schedule_id')
+    .eq('id', appointmentId)
+    .eq('patient_id', user.id) // Đảm bảo người dùng chỉ có thể hủy lịch của chính họ
+    .single()
+
+  if (fetchError || !appointment) {
+    return { success: false, message: 'Không tìm thấy lịch hẹn hoặc bạn không có quyền hủy.' }
+  }
+
+  // Xóa lịch hẹn
+  const { error: deleteError } = await supabase.from('appointments').delete().eq('id', appointmentId)
+
+  if (deleteError) {
+    console.error('Error canceling appointment:', deleteError)
+    return { success: false, message: 'Không thể hủy lịch hẹn. Vui lòng thử lại.' }
+  }
+
+  revalidatePath('/my-appointments')
+  return { success: true, message: 'Lịch hẹn đã được hủy thành công.' }
+}
+
 export async function signup(formData: FormData) {
   'use server'
 
