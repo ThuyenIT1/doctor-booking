@@ -5,7 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, User as UserIcon } from 'lucide-react';
 
-// Correct the type to match the actual object structure from Supabase
+// Force the page to be dynamically rendered, avoiding build-time/run-time discrepancies.
+export const dynamic = 'force-dynamic';
+
+// Correct the type to match the actual object structure observed at runtime.
 type Appointment = {
   id: number;
   schedules: {
@@ -26,7 +29,6 @@ export default async function MyAppointmentsPage() {
     redirect('/login?message=Bạn cần đăng nhập để xem lịch hẹn của mình.');
   }
 
-  // The query remains the same, as it correctly describes the relationship
   const { data: appointments, error } = await supabase
     .from('appointments')
     .select(`
@@ -51,7 +53,7 @@ export default async function MyAppointmentsPage() {
       {appointments && appointments.length > 0 ? (
         <div className="grid gap-6">
           {(appointments as Appointment[]).map((appointment) => {
-            // Access properties as objects, which matches the real data structure
+            // Access properties as objects, which is correct for dynamic rendering.
             const schedule = appointment.schedules;
             if (!schedule) return null;
 
