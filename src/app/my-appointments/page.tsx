@@ -7,26 +7,26 @@ import { Calendar, Clock, User as UserIcon } from 'lucide-react';
 import { CancelAppointmentDialog } from './CancelAppointmentDialog';
 
 interface Doctor {
-  id: any;
-  name: any;
-  specialty: any;
-  education: any;
-  experience_years: any;
+  id: number;
+  name: string;
+  specialty: string | null;
+  education: string | null;
+  experience_years: number | null;
 }
 
 interface Schedule {
-  id: any;
-  start_time: any;
-  end_time: any;
-  doctor: Doctor[];
+  id: number;
+  start_time: string;
+  end_time: string;
+  doctor: Doctor;
 }
 
 interface DatabaseAppointment {
-  id: any;
-  patient_id: any;
-  schedule_id: any;
-  created_at: any;
-  schedule: Schedule[];
+  id: number;
+  patient_id: string;
+  schedule_id: number;
+  created_at: string;
+  schedule: Schedule;
 }
 
 export default async function MyAppointmentsPage() {
@@ -80,11 +80,11 @@ export default async function MyAppointmentsPage() {
 
       {appointments && appointments.length > 0 ? (
         <div className="grid gap-6">
-          {(appointments as DatabaseAppointment[]).map((appointment) => {
-            const schedule = appointment.schedule[0];
+          {(appointments as unknown as DatabaseAppointment[]).map((appointment) => {
+            const schedule = appointment.schedule;
             if (!schedule) return null;
 
-            const doctor = schedule.doctor[0];
+            const doctor = schedule.doctor;
             const { start_time, end_time } = schedule;
             const appointmentDate = new Date(start_time);
             const today = new Date();
