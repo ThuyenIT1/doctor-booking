@@ -5,10 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, User as UserIcon } from 'lucide-react';
 
-// Force the page to be dynamically rendered, avoiding build-time/run-time discrepancies.
-export const dynamic = 'force-dynamic';
-
-// Correct the type to match the actual object structure observed at runtime.
+// Use array types to pass the build process
 type Appointment = {
   id: number;
   schedules: {
@@ -16,8 +13,8 @@ type Appointment = {
     end_time: string;
     doctors: {
       name: string;
-    } | null;
-  } | null;
+    }[] | null;
+  }[] | null;
 };
 
 export default async function MyAppointmentsPage() {
@@ -44,20 +41,31 @@ export default async function MyAppointmentsPage() {
 
   if (error) {
     console.error('Error fetching appointments:', error);
-    return <p className="text-center text-red-500">Đã có lỗi xảy ra khi tải lịch hẹn của bạn.</p>;
+    return <p className="text-center text-red-500">Đã có lỗi xảy ra khi tải lịch hẹn của bạn: {error.message}</p>;
   }
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4 md:px-6">
+      {/* --- DEBUGGING SECTION START --- */}
+      <div className="bg-gray-800 text-white p-4 rounded-lg mb-6">
+        <h2 className="text-lg font-bold">DEBUG: Dữ liệu thô từ Supabase</h2>
+        <p className="text-sm text-gray-300">Vui lòng sao chép và gửi lại toàn bộ nội dung bên dưới.</p>
+        <pre className="text-xs bg-black p-2 rounded mt-2 whitespace-pre-wrap">
+          {JSON.stringify(appointments, null, 2)}
+        </pre>
+      </div>
+      {/* --- DEBUGGING SECTION END --- */}
+
       <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Lịch hẹn của tôi</h1>
       {appointments && appointments.length > 0 ? (
         <div className="grid gap-6">
           {(appointments as Appointment[]).map((appointment) => {
-            // Access properties as objects, which is correct for dynamic rendering.
-            const schedule = appointment.schedules;
+            const schedule = appointment.schedules?.[0];
             if (!schedule) return null;
 
-            const { start_time, end_time, doctors } = schedule;
+            const doctor = schedule.doctors?.[0];
+
+            const { start_time, end_time } = schedule;
             const appointmentDate = new Date(start_time).toLocaleDateString('vi-VN', {
               weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
             });
@@ -69,7 +77,7 @@ export default async function MyAppointmentsPage() {
                 <CardHeader className="bg-gray-50 border-b">
                   <CardTitle className="flex items-center gap-3 text-xl text-blue-700">
                     <UserIcon className="h-6 w-6" />
-                    <span>Bác sĩ: {doctors?.name ?? 'Không rõ'}</span>
+                    <span>Bác sĩ: {doctor?.name ?? 'Không rõ'}</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 grid gap-4">
