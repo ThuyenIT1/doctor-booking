@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthButton from "@/components/AuthButton";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,6 +47,7 @@ export default function RootLayout({
           </div>
         </header>
         <main className="container mx-auto px-6 py-8">{children}</main>
+        <ChatWidget />
       </body>
     </html>
   );
