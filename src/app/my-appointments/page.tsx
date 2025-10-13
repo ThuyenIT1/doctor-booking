@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, User as UserIcon } from 'lucide-react';
 
-// Adjust the type to match the actual data structure returned by Supabase
+// Correct the type to match the actual object structure from Supabase
 type Appointment = {
   id: number;
   schedules: {
@@ -14,7 +14,7 @@ type Appointment = {
     doctors: {
       name: string;
     } | null;
-  }[] | null; // schedules is an array
+  } | null;
 };
 
 export default async function MyAppointmentsPage() {
@@ -26,7 +26,7 @@ export default async function MyAppointmentsPage() {
     redirect('/login?message=Bạn cần đăng nhập để xem lịch hẹn của mình.');
   }
 
-  // Fetch appointments with related schedule and doctor details
+  // The query remains the same, as it correctly describes the relationship
   const { data: appointments, error } = await supabase
     .from('appointments')
     .select(`
@@ -51,9 +51,9 @@ export default async function MyAppointmentsPage() {
       {appointments && appointments.length > 0 ? (
         <div className="grid gap-6">
           {(appointments as Appointment[]).map((appointment) => {
-            // Safely access the first schedule in the array
-            const schedule = appointment.schedules?.[0];
-            if (!schedule) return null; // Skip if schedule data is missing
+            // Access properties as objects, which matches the real data structure
+            const schedule = appointment.schedules;
+            if (!schedule) return null;
 
             const { start_time, end_time, doctors } = schedule;
             const appointmentDate = new Date(start_time).toLocaleDateString('vi-VN', {

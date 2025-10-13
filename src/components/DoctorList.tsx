@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image' // Import the Image component
+import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Doctor } from '@/app/page' // Import type từ page.tsx
+import { Doctor } from '@/app/page'
+import doctorImage from '../../public/img/doctor.png' // Import the image
 
 type DoctorListProps = {
   doctors: Doctor[];
@@ -61,11 +62,12 @@ export default function DoctorList({ doctors, specialties, error }: DoctorListPr
                 <Card className="h-full transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-2 border-2 border-transparent group-hover:border-primary">
                   <CardContent className="flex flex-col items-center p-6 text-center">
                     <Image
-                      src="/img/doctor.png"
+                      src={doctorImage} // Use the imported image
                       alt={`Ảnh của bác sĩ ${doctor.name}`}
                       width={90}
                       height={90}
                       className="rounded-full mb-4 border-2 border-gray-200"
+                      placeholder="blur" // Optional: add a blur placeholder
                     />
                     <CardHeader className="p-0">
                       <CardTitle className="text-lg font-bold text-primary">{doctor.name}</CardTitle>
