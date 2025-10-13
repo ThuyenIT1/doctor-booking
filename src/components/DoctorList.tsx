@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image' // Import the Image component
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -59,11 +60,11 @@ export default function DoctorList({ doctors, specialties, error }: DoctorListPr
               <Link href={`/doctors/${doctor.id}`} key={doctor.id} className="h-full block group">
                 <Card className="h-full transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-2 border-2 border-transparent group-hover:border-primary">
                   <CardContent className="flex flex-col items-center p-6 text-center">
-                    <img
+                    <Image
                       src="/img/doctor.png"
                       alt={`Ảnh của bác sĩ ${doctor.name}`}
-                      width="90"
-                      height="90"
+                      width={90}
+                      height={90}
                       className="rounded-full mb-4 border-2 border-gray-200"
                     />
                     <CardHeader className="p-0">

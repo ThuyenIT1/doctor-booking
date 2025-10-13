@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, User as UserIcon } from 'lucide-react';
 
-// Define a more specific type for the appointment data we expect
+// Adjust the type to match the actual data structure returned by Supabase
 type Appointment = {
   id: number;
   schedules: {
@@ -14,7 +14,7 @@ type Appointment = {
     doctors: {
       name: string;
     } | null;
-  } | null;
+  }[] | null; // schedules is an array
 };
 
 export default async function MyAppointmentsPage() {
@@ -51,9 +51,11 @@ export default async function MyAppointmentsPage() {
       {appointments && appointments.length > 0 ? (
         <div className="grid gap-6">
           {(appointments as Appointment[]).map((appointment) => {
-            if (!appointment.schedules) return null; // Skip if schedule data is missing
+            // Safely access the first schedule in the array
+            const schedule = appointment.schedules?.[0];
+            if (!schedule) return null; // Skip if schedule data is missing
 
-            const { start_time, end_time, doctors } = appointment.schedules;
+            const { start_time, end_time, doctors } = schedule;
             const appointmentDate = new Date(start_time).toLocaleDateString('vi-VN', {
               weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
             });
