@@ -31,7 +31,7 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="text-center">
         <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-          Chào mừng đến với DoctorBook
+          Chào mừng đến với DoctorBooking
         </h1>
         <p className="mx-auto text-muted-foreground md:text-xl mt-4">
           Sức khỏe của bạn, ưu tiên của chúng tôi. Dễ dàng tìm và đặt lịch hẹn với các bác sĩ hàng đầu.

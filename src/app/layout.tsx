@@ -4,7 +4,7 @@ import "./globals.css";
 import AuthButton from "@/components/AuthButton";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import ChatWidget from "@/components/chat/ChatWidget";
+import ChatWindow from "@/components/chat/ChatWindow";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,13 +41,13 @@ export default function RootLayout({
               href="/"
               className="font-serif text-2xl font-bold text-primary transition-colors hover:text-primary/80"
             >
-              DoctorBook
+              DoctorBooking
             </Link>
             <AuthButton />
           </div>
         </header>
         <main className="container mx-auto px-6 py-8">{children}</main>
-        <ChatWidget />
+        <ChatWindow />
       </body>
     </html>
   );

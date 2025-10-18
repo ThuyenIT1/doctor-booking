@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { updateProfile } from '@/app/auth/actions'
 import type { User } from '@supabase/supabase-js'
+import { Button } from '@/components/ui/button'
 
 type Profile = {
   full_name: string | null
@@ -67,7 +68,7 @@ export default function ProfilePage() {
   }
 
   if (loading && !profile) {
-    return <p>Đang tải hồ sơ của bạn...</p>
+    return <p className="text-center py-8">Đang tải hồ sơ của bạn...</p>
   }
 
   if (!user) {
@@ -75,47 +76,99 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-6">Hồ sơ của bạn</h1>
+    <div className="w-full max-w-4xl mx-auto py-8 px-4 md:px-6">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Hồ sơ của tôi</h1>
+      </div>
       
       {message.content && (
-        <p className={`p-4 mb-4 text-center rounded-md ${message.type === 'success' ? 'text-green-800 bg-green-100' : 'text-red-800 bg-red-100'}`}>
+        <div className={`p-4 mb-6 text-center rounded-lg border ${
+          message.type === 'success' 
+            ? 'bg-green-50 border-green-200 text-green-800' 
+            : 'bg-red-50 border-red-200 text-red-800'
+        }`}>
           {message.content}
-        </p>
+        </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-          <input id="email" type="text" value={user.email || ''} disabled className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm sm:text-sm" />
-        </div>
+      <div className="bg-white rounded-lg border shadow-sm p-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-1.5">
+                Email
+              </label>
+              <input
+                id="email"
+                type="text"
+                value={user.email || ''}
+                disabled
+                className="w-full px-3 py-2 bg-gray-50 border rounded-md text-gray-500"
+              />
+            </div>
 
-        <div>
-          <label htmlFor="id" className="block text-sm font-medium text-gray-700">ID Người dùng</label>
-          <input id="id" type="text" value={user.id} disabled className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm sm:text-sm" />
-        </div>
+            <div>
+              <label htmlFor="id" className="block text-sm font-medium mb-1.5">
+                ID Người dùng
+              </label>
+              <input
+                id="id"
+                type="text"
+                value={user.id}
+                disabled
+                className="w-full px-3 py-2 bg-gray-50 border rounded-md text-gray-500"
+              />
+            </div>
 
-        <div>
-          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Họ và Tên</label>
-          <input id="fullName" name="fullName" type="text" defaultValue={profile?.full_name || ''} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-        </div>
+            <div>
+              <label htmlFor="fullName" className="block text-sm font-medium mb-1.5">
+                Họ và Tên
+              </label>
+              <input
+                id="fullName"
+                name="fullName"
+                type="text"
+                defaultValue={profile?.full_name || ''}
+                className="w-full px-3 py-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-        <div>
-          <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Số điện thoại</label>
-          <input id="phoneNumber" name="phoneNumber" type="text" defaultValue={profile?.phone_number || ''} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-        </div>
+            <div>
+              <label htmlFor="phoneNumber" className="block text-sm font-medium mb-1.5">
+                Số điện thoại
+              </label>
+              <input
+                id="phoneNumber"
+                name="phoneNumber"
+                type="text"
+                defaultValue={profile?.phone_number || ''}
+                className="w-full px-3 py-2 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-        <div>
-          <label htmlFor="updated_at" className="block text-sm font-medium text-gray-700">Cập nhật lần cuối</label>
-          <input id="updated_at" type="text" value={profile?.updated_at ? new Date(profile.updated_at).toLocaleString('vi-VN') : 'Chưa có'} disabled className="mt-1 block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm sm:text-sm" />
-        </div>
+            <div>
+              <label htmlFor="updated_at" className="block text-sm font-medium mb-1.5">
+                Cập nhật lần cuối
+              </label>
+              <input
+                id="updated_at"
+                type="text"
+                value={profile?.updated_at ? new Date(profile.updated_at).toLocaleString('vi-VN') : 'Chưa có'}
+                disabled
+                className="w-full px-3 py-2 bg-gray-50 border rounded-md text-gray-500"
+              />
+            </div>
+          </div>
 
-        <div>
-          <button type="submit" disabled={loading} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full"
+          >
             {loading ? 'Đang cập nhật...' : 'Cập nhật Hồ sơ'}
-          </button>
-        </div>
-      </form>
+          </Button>
+        </form>
+      </div>
     </div>
   )
 }
