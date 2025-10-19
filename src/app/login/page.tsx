@@ -51,9 +51,9 @@ export default function LoginPage() {
       return;
     }
 
-    // On successful login, redirect to home and refresh the page to update server components
-    router.push('/')
-    router.refresh()
+    // Force hard redirect để đảm bảo cookies được set và middleware chạy lại
+    // Đặc biệt quan trọng trên production (Railway, Vercel, etc.)
+    window.location.href = '/'
   }
 
   // Clear errors when switching tabs
